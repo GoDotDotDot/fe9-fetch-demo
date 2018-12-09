@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>未设置之前</h2>
+    <div id="headers-before"></div>
+    <h2>设置之后</h2>
+    <div id="headers-after"></div>
+  </body>
+</html>
+<script>
+  function printHeaders(headers) {
+    let str = '';
+    for (let header of headers.entries()) {
+      str += `
+          <li>${header[0]}: ${header[1]}</li>
+          `;
+      console.log(header[0] + ': ' + header[1]);
+    }
+    return `<ul>
+          ${str}
+          </ul>`;
+  }
+
+  const headers = new Headers();
+
+  // 我们打印下看看是否返回的是一个空的列表
+  const before = printHeaders(headers); // 发现这里没有任何输出
+  document.getElementById('headers-before').innerHTML = before;
+
+  // 我们添加一个请求头
+  headers.append('Content-Type', 'text/plain');
+  headers.append('Content-Type', 'text/html');
+
+  headers.set('Content-Type', ['a', 'b']);
+
+  const headers2 = new Headers({
+    'Content-Type': 'text/plain',
+    'X-Token': 'abcdefg',
+  });
+
+  const after = printHeaders(headers); // 输出：content-type: text/plain
+  document.getElementById('headers-after').innerHTML = after;
+</script>

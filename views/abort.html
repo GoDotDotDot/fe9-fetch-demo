@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>FE9部 Fetch Demo</title>
+  </head>
+  <body>
+      <h2>Abort</h2>
+    <div id="fetch-abort">正在请求中...</div>
+  </body>
+</html>
+<script>
+  const controller = new AbortController();
+  const signal = controller.signal;
+
+  fetch('/data?name=fe', {
+    method: 'GET',
+    signal,
+  })
+    .then(response => response.json())
+    .then(resData => {
+      const { status, data } = resData;
+      if (!status) {
+        window.alert('发生了一个错误！');
+        return;
+      }
+      document.getElementById('fetch-abort').innerHTML = data;
+    })
+    .catch(err =>{
+      document.getElementById('fetch-abort').innerHTML = `
+      <span style="color: red">
+      ${err.name}: ${err.message}  
+      </span>`;
+    })
+    ;
+  controller.abort();
+</script>

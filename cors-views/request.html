@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>FE9部 Fetch Demo</title>
+  </head>
+  <body>
+    <h1>Request | FE9部 Fetch Demo</h1>
+    <div id="fetch">正在请求中...</div>
+  </body>
+</html>
+
+<script>
+  function printHeaders(headers) {
+    for (let header of headers.entries()) {
+      console.log(header[0] + ': ' + header[1]);
+    }
+  }
+</script>
+<script>
+  // 客户端
+  const headers = new Headers({
+    'X-Token': 'fe9',
+  });
+  const request = new Request('http://127.0.0.1:4000/api/request', {
+    method: 'GET',
+    headers,
+    credentials: 'include',
+    // mode: 'no-cors'
+  });
+  console.log(request); // Request {method: "GET", url: "http://127.0.0.1:4000/api/request", headers: Headers, destination: "", referrer: "about:client", …}
+  console.log(request.method); // GET
+  console.log(request.mode);
+  // 如果你想打印headers信息，可以调用 printHeaders(request.headers)
+
+  // 这里我们先发起一个请求试一试
+  fetch(request)
+    .then(response => response.json())
+    .then(resData => {
+      const { status, data } = resData;
+      if (!status) {
+        window.alert('发生了一个错误！');
+        return;
+      }
+      document.getElementById('fetch').innerHTML = data;
+    });
+</script>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>FE9部 Fetch Demo</title>
+  </head>
+  <body>
+    <h1>Response | FE9部 Fetch Demo</h1>
+    <div id="fetch">正在请求中...</div>
+    <hr>
+    <h3>Status</h3>
+    <div id="status">正在请求中...</div>
+    <h3>Headers</h3>
+    <ul id="headers">正在请求中...</ul>
+  </body>
+</html>
+
+<script>
+  function printHeaders(headers) {
+    for (let header of headers.entries()) {
+      console.log(header[0] + ': ' + header[1]);
+    }
+  }
+  function headersToString(headers) {
+    let str = '';
+    for (let header of headers.entries()) {
+      str += `<li>${header[0]}: ${header[1]}</li>`
+    }
+    return str;
+  }
+</script>
+<script>
+  // 客户端
+  const headers = new Headers({
+    'X-Token': 'fe9-token-from-frontend',
+  });
+  const request = new Request('/api/response', {
+    method: 'GET',
+    headers,
+  });
+
+  // 这里我们先发起一个请求试一试
+  fetch(request)
+    .then(response => {
+      const { status, headers } = response;
+      document.getElementById('status').innerHTML = `${status}`;
+      document.getElementById('headers').innerHTML = headersToString(headers);
+
+      return response.json();
+    })
+    .then(resData => {
+      const { status, data } = resData;
+      if (!status) {
+        window.alert('发生了一个错误！');
+        return;
+      }
+      document.getElementById('fetch').innerHTML = data;
+    });
+</script>

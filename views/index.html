@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>FE9部 Fetch Demo</title>
+  </head>
+  <body>
+    <h2>通过字符串请求</h2>
+    <div id="fetch-str">正在请求中...</div>
+    <h2>通过 Request 实例对象请求</h2>
+
+    <div id="fetch-req">正在请求中...</div>
+  </body>
+</html>
+<script>
+  // 客户端
+  const headers = new Headers({
+    'X-Token': 'fe9',
+  });
+
+  setTimeout(() => {
+    fetch('/data?name=fe', {
+      method: 'GET',
+      headers,
+    })
+      .then(response => response.json())
+      .then(resData => {
+        const { status, data } = resData;
+        if (!status) {
+          window.alert('发生了一个错误！');
+          return;
+        }
+        document.getElementById('fetch-str').innerHTML = data;
+      });
+  }, 1000);
+
+  const request = new Request('/api/request', {
+    method: 'GET',
+    headers,
+  });
+
+  setTimeout(() => {
+    fetch(request)
+      .then(res => res.json())
+      .then(res => {
+        const { status, data } = res;
+        if (!status) {
+          alert('服务器处理失败');
+          return;
+        }
+        document.getElementById('fetch-req').innerHTML = data;
+      });
+  }, 1200);
+</script>
