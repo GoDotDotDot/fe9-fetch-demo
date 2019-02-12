@@ -57,7 +57,7 @@ const defaultOptions = {
  */
 export default function request(url, options = {}) {
   return new Promise((resolve, reject) => {
-    const headers = { ...defaultOptions.headers, ...options.headers };
+    const headers = Object.assign({}, defaultOptions.headers, options.headers);
     let abortId;
     let timeout = false;
     if (options.timeout) {
